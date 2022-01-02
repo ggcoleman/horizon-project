@@ -5,21 +5,55 @@ using UnityEngine;
 
 public class Movement : MonoBehaviour
 {
-    void Start()
-    {
 
+    Rigidbody rb;
+
+    [SerializeField] float thrustForce = 100f;
+    [SerializeField] float xRotationAngle = 200f;
+
+    private void Awake()
+    {
+        rb = GetComponent<Rigidbody>();
     }
 
     void Update()
     {
-        ProcessInput();
+        ProcessThrust();
+        ProcessRotation();
     }
 
-    private void ProcessInput()
+    private void ProcessRotation()
     {
+        var force = Vector3.forward * xRotationAngle * Time.deltaTime;
+
+        if (Input.GetKey(KeyCode.A))
+        {
+            ApplyRotation(force);
+        }
+        else if (Input.GetKey(KeyCode.D))
+        {
+            ApplyRotation(-force);
+        }
+        else
+        {
+            ApplyRotation(new Vector3());
+        }
+
+
+    }
+
+    private void ApplyRotation(Vector3 force)
+    {
+        rb.AddTorque(force);
+    }
+
+    private void ProcessThrust()
+    {
+        var force = Vector3.up * thrustForce * Time.deltaTime;
+
         if (Input.GetKey(KeyCode.Space))
         {
-            Debug.Log("Thrusting....");
+            rb.AddRelativeForce(force);
         }
     }
 }
