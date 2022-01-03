@@ -6,8 +6,6 @@ using UnityEngine.SceneManagement;
 
 public class CollisionHandler : MonoBehaviour
 {
-    [SerializeField] float reloadSceneDelay = 1.5f;
-    [SerializeField] float loadNextSceneDelay = 2.5f;
 
     [SerializeField] ParticleSystem crashParticles;
 
@@ -18,6 +16,8 @@ public class CollisionHandler : MonoBehaviour
     AudioSource audioSource;
     Movement movement;
 
+    SceneController sceneController;
+
     bool isTransitioning = false;
 
     private void Awake()
@@ -25,6 +25,7 @@ public class CollisionHandler : MonoBehaviour
         movement = GetComponent<Movement>();
         audioController = FindObjectOfType<AudioController>();
         audioSource = GetComponent<AudioSource>();
+        sceneController = FindObjectOfType<SceneController>();
     }
 
     private void OnCollisionEnter(Collision other)
@@ -52,7 +53,7 @@ public class CollisionHandler : MonoBehaviour
         finishParticles.Play();
         audioController.StopSfx(audioSource);
         audioController.PlayLevelFinishAudio(audioSource);
-        StartCoroutine(LoadNextScene());
+        sceneController.LoadTheNextScene();
     }
 
     private void CrashSequence()
@@ -62,31 +63,8 @@ public class CollisionHandler : MonoBehaviour
         crashParticles.Play();
         audioController.StopSfx(audioSource);
         audioController.PlayDeathAudio(audioSource);
-        StartCoroutine(ReloadScene());
+        sceneController.ReloadCurrentScene();
     }
 
-    IEnumerator LoadNextScene()
-    {
-        yield return new WaitForSeconds(loadNextSceneDelay);
 
-        var currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
-        var nextSceneIndex = currentSceneIndex + 1;
-        if (nextSceneIndex == SceneManager.sceneCountInBuildSettings)
-        {
-            SceneManager.LoadScene(0);
-        }
-        else
-        {
-            SceneManager.LoadScene(nextSceneIndex);
-        }
-
-    }
-
-    IEnumerator ReloadScene()
-    {
-        yield return new WaitForSeconds(reloadSceneDelay);
-
-        var currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
-        SceneManager.LoadScene(currentSceneIndex);
-    }
 }
