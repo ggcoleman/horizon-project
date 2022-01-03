@@ -12,6 +12,13 @@ public class Movement : MonoBehaviour
     [SerializeField] float thrustForce = 100f;
     [SerializeField] float xRotationAngle = 200f;
 
+
+    [SerializeField] ParticleSystem rightThrusterParticles;
+    [SerializeField] ParticleSystem leftThrusterParticles;
+    [SerializeField] ParticleSystem backThrusterParticles;
+    [SerializeField] ParticleSystem frontThrusterParticles;
+    [SerializeField] ParticleSystem mainThrusterParticles;
+
     AudioSource audioSource;
 
     private void Awake()
@@ -33,18 +40,29 @@ public class Movement : MonoBehaviour
 
         if (Input.GetKey(KeyCode.A))
         {
-            ApplyRotation(force);
+            Rotate(force, leftThrusterParticles, rightThrusterParticles);
         }
         else if (Input.GetKey(KeyCode.D))
         {
-            ApplyRotation(-force);
+            Rotate(-force, rightThrusterParticles, leftThrusterParticles);
         }
         else
         {
+            leftThrusterParticles.Stop();
+            rightThrusterParticles.Stop();
             ApplyRotation(new Vector3());
         }
+    }
 
+    private void Rotate(Vector3 force, ParticleSystem stopThrusters, ParticleSystem startThrusters)
+    {
+        if (!startThrusters.isPlaying)
+        {
+            startThrusters.Play();
+        }
 
+        stopThrusters.Stop();
+        ApplyRotation(force);
     }
 
     private void ApplyRotation(Vector3 force)
@@ -54,18 +72,37 @@ public class Movement : MonoBehaviour
 
     private void ProcessThrust()
     {
-        var force = Vector3.up * thrustForce * Time.deltaTime;
-
         if (Input.GetKey(KeyCode.Space))
         {
-            rb.AddRelativeForce(force);
-            audioController.PlayTrusterAudio(audioSource);
+            StartThrusting();
         }
         else
         {
-            audioController.StopSfx(audioSource);
+            StopThrusting();
         }
     }
 
+    private void StopThrusting()
+    {
+        audioController.StopSfx(audioSource);
+        backThrusterParticles.Stop();
+        frontThrusterParticles.Stop();
+        mainThrusterParticles.Stop();
+    }
 
+    private void StartThrusting()
+    {
+        var force = Vector3.up * thrustForce * Time.deltaTime;
+        if (!mainThrusterParticles.isPlaying &&
+        !backThrusterParticles.isPlaying &&
+        !frontThrusterParticles.isPlaying)
+        {
+            mainThrusterParticles.Play();
+            backThrusterParticles.Play();
+            frontThrusterParticles.Play();
+        }
+
+        rb.AddRelativeForce(force);
+        audioController.PlayTrusterAudio(audioSource);
+    }
 }

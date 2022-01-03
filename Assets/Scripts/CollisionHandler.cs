@@ -9,6 +9,11 @@ public class CollisionHandler : MonoBehaviour
     [SerializeField] float reloadSceneDelay = 1.5f;
     [SerializeField] float loadNextSceneDelay = 2.5f;
 
+    [SerializeField] ParticleSystem crashParticles;
+
+    [SerializeField] ParticleSystem finishParticles;
+
+
     AudioController audioController;
     AudioSource audioSource;
     Movement movement;
@@ -44,6 +49,7 @@ public class CollisionHandler : MonoBehaviour
     {
         isTransitioning = true;
         movement.enabled = false;
+        finishParticles.Play();
         audioController.StopSfx(audioSource);
         audioController.PlayLevelFinishAudio(audioSource);
         StartCoroutine(LoadNextScene());
@@ -53,6 +59,7 @@ public class CollisionHandler : MonoBehaviour
     {
         isTransitioning = true;
         movement.enabled = false;
+        crashParticles.Play();
         audioController.StopSfx(audioSource);
         audioController.PlayDeathAudio(audioSource);
         StartCoroutine(ReloadScene());
