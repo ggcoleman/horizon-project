@@ -12,7 +12,6 @@ public class Movement : MonoBehaviour
     [SerializeField] float thrustForce = 100f;
     [SerializeField] float xRotationAngle = 200f;
 
-    bool collidersOn = true;
 
     [SerializeField] ParticleSystem rightThrusterParticles;
     [SerializeField] ParticleSystem leftThrusterParticles;
@@ -22,43 +21,21 @@ public class Movement : MonoBehaviour
 
     AudioSource audioSource;
 
-    SceneController sceneController;
 
     private void Awake()
     {
         audioController = FindObjectOfType<AudioController>();
         audioSource = GetComponent<AudioSource>();
         rb = GetComponent<Rigidbody>();
-        sceneController = FindObjectOfType<SceneController>();
     }
 
     void Update()
     {
         ProcessThrust();
         ProcessRotation();
-        Cheat();
     }
 
-    private void Cheat()
-    {
-        if (Input.GetKey(KeyCode.L))
-        {
-            print("[Cheat] Loading the next scene...");
-            sceneController.LoadTheNextScene(0f);
-        }
-        if (Input.GetKey(KeyCode.C))
-        {
-            collidersOn = !collidersOn;
 
-            var capsuleCollider = GetComponent<CapsuleCollider>();
-            var baseCollider = GetComponentInChildren<BoxCollider>();
-
-            capsuleCollider.enabled = collidersOn;
-            baseCollider.enabled = collidersOn;
-
-            print("[Cheat] Colliders on: " + collidersOn);
-        }
-    }
 
     private void ProcessRotation()
     {
