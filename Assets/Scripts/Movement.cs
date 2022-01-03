@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class Movement : MonoBehaviour
 {
+    AudioController audioController;
 
     Rigidbody rb;
 
@@ -13,6 +14,7 @@ public class Movement : MonoBehaviour
 
     private void Awake()
     {
+        audioController = FindObjectOfType<AudioController>();
         rb = GetComponent<Rigidbody>();
     }
 
@@ -54,6 +56,13 @@ public class Movement : MonoBehaviour
         if (Input.GetKey(KeyCode.Space))
         {
             rb.AddRelativeForce(force);
+            audioController.PlayTrusterAudio();
+        }
+        else
+        {
+            audioController.StopSfx();
         }
     }
+
+
 }
