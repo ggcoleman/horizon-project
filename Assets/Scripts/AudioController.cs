@@ -5,12 +5,11 @@ using UnityEngine;
 
 public class AudioController : MonoBehaviour
 {
+    AudioSource generalAudioSource;
 
-
-    AudioSource audioSource;
     private void Awake()
     {
-        audioSource = GetComponent<AudioSource>();
+        generalAudioSource = GetComponent<AudioSource>();
     }
 
     [Header("General Sound Effects")]
@@ -24,34 +23,55 @@ public class AudioController : MonoBehaviour
     [SerializeField] float deathClipVolume = 0.5f;
 
 
-    public void PlayTrusterAudio()
+    [Header("Pickups")]
+    [SerializeField] AudioClip fuelClip;
+    [SerializeField] float fuelVolume = 0.5f;
+
+
+    public void PlayTrusterAudio(AudioSource source)
     {
-        PlaySound(boosterClip, boosterVolume);
+        PlaySound(source, boosterClip, boosterVolume, true);
     }
 
-    public void PlayLevelFinishAudio()
+    public void PlayLevelFinishAudio(AudioSource source)
     {
-        PlaySound(finishClip, finishClipVolume);
+        PlaySound(source, finishClip, finishClipVolume);
     }
 
-    public void PlayDeathAudio()
+    public void PlayDeathAudio(AudioSource source)
     {
-        PlaySound(deathClip, deathClipVolume);
+        PlaySound(source, deathClip, deathClipVolume);
+    }
+
+    public void PlayFuelPickupAudio(AudioSource source)
+    {
+        PlaySound(source, fuelClip, fuelVolume);
     }
 
 
-    public void StopSfx()
+    public void StopSfx(AudioSource source)
     {
-        audioSource.Stop();
+        source.Stop();
     }
 
 
-    void PlaySound(AudioClip clip, float volume)
+    void PlaySound(AudioSource source, AudioClip clip, float volume, bool ensureNotAlreadyPlaying = false)
     {
-        if (audioSource != null && !audioSource.isPlaying)
+        if (source != null)
         {
-            audioSource.PlayOneShot(clip, volume);
-            audioSource.loop = true;
+            if (ensureNotAlreadyPlaying)
+            {
+                if (!source.isPlaying)
+                {
+                    source.PlayOneShot(clip, volume);
+                }
+            }
+            else
+            {
+                source.PlayOneShot(clip, volume);
+            }
+
+            source.loop = true;
         }
     }
 }

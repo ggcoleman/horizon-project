@@ -211,14 +211,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 8170739131650270084, guid: 0a85ffaf59a5fd54492676065073d4b3, type: 3}
-      propertyPath: reloadSceneDelay
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 8170739131650270084, guid: 0a85ffaf59a5fd54492676065073d4b3, type: 3}
-      propertyPath: loadNextSceneDelay
-      value: 3
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0a85ffaf59a5fd54492676065073d4b3, type: 3}
 --- !u!1001 &276590144
@@ -989,6 +981,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 624248046}
     m_Modifications:
+    - target: {fileID: 2462324322524891749, guid: c3a76b27fd819094692cfa987ad896fa, type: 3}
+      propertyPath: m_IsTrigger
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4998156812182840170, guid: c3a76b27fd819094692cfa987ad896fa, type: 3}
       propertyPath: m_Name
       value: Fuel
@@ -1003,7 +999,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5445504931667690986, guid: c3a76b27fd819094692cfa987ad896fa, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 2.08
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 5445504931667690986, guid: c3a76b27fd819094692cfa987ad896fa, type: 3}
       propertyPath: m_LocalPosition.z

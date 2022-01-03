@@ -10,16 +10,22 @@ public class CollisionHandler : MonoBehaviour
     [SerializeField] float loadNextSceneDelay = 2.5f;
 
     AudioController audioController;
+    AudioSource audioSource;
     Movement movement;
+
+    bool isTransitioning = false;
 
     private void Awake()
     {
         movement = GetComponent<Movement>();
         audioController = FindObjectOfType<AudioController>();
+        audioSource = GetComponent<AudioSource>();
     }
 
     private void OnCollisionEnter(Collision other)
     {
+        if (isTransitioning) { return; }
+
         switch (other.gameObject.tag)
         {
             case "Friendly":
@@ -27,8 +33,6 @@ public class CollisionHandler : MonoBehaviour
                 break;
             case "Finish":
                 FinishSequence();
-                break;
-            case "Fuel":
                 break;
             default:
                 CrashSequence();
@@ -38,15 +42,19 @@ public class CollisionHandler : MonoBehaviour
 
     private void FinishSequence()
     {
+        isTransitioning = true;
         movement.enabled = false;
-        audioController.PlayLevelFinishAudio();
+        audioController.StopSfx(audioSource);
+        audioController.PlayLevelFinishAudio(audioSource);
         StartCoroutine(LoadNextScene());
     }
 
     private void CrashSequence()
     {
+        isTransitioning = true;
         movement.enabled = false;
-        audioController.PlayDeathAudio();
+        audioController.StopSfx(audioSource);
+        audioController.PlayDeathAudio(audioSource);
         StartCoroutine(ReloadScene());
     }
 

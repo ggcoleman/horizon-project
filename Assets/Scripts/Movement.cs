@@ -12,9 +12,12 @@ public class Movement : MonoBehaviour
     [SerializeField] float thrustForce = 100f;
     [SerializeField] float xRotationAngle = 200f;
 
+    AudioSource audioSource;
+
     private void Awake()
     {
         audioController = FindObjectOfType<AudioController>();
+        audioSource = GetComponent<AudioSource>();
         rb = GetComponent<Rigidbody>();
     }
 
@@ -56,11 +59,11 @@ public class Movement : MonoBehaviour
         if (Input.GetKey(KeyCode.Space))
         {
             rb.AddRelativeForce(force);
-            audioController.PlayTrusterAudio();
+            audioController.PlayTrusterAudio(audioSource);
         }
         else
         {
-            audioController.StopSfx();
+            audioController.StopSfx(audioSource);
         }
     }
 
