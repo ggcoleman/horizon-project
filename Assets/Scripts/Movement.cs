@@ -19,6 +19,8 @@ public class Movement : MonoBehaviour
     [SerializeField] ParticleSystem frontThrusterParticles;
     [SerializeField] ParticleSystem mainThrusterParticles;
 
+    [SerializeField] Light thrusterPointLight;
+
     AudioSource audioSource;
 
 
@@ -87,6 +89,7 @@ public class Movement : MonoBehaviour
 
     private void StopThrusting()
     {
+        thrusterPointLight.enabled = false;
         audioController.StopSfx(audioSource);
         backThrusterParticles.Stop();
         frontThrusterParticles.Stop();
@@ -105,6 +108,7 @@ public class Movement : MonoBehaviour
             frontThrusterParticles.Play();
         }
 
+        thrusterPointLight.enabled = true;
         rb.AddRelativeForce(force);
         audioController.PlayTrusterAudio(audioSource);
     }

@@ -8,6 +8,10 @@ public class Fuel : MonoBehaviour
 
     AudioSource audioSource;
     AudioController audioController;
+
+    [SerializeField] Light frontLight;
+    [SerializeField] Light backLight;
+
     void Awake()
     {
         audioSource = GetComponent<AudioSource>();
@@ -38,16 +42,17 @@ public class Fuel : MonoBehaviour
         GetComponent<Renderer>().enabled = false;
         GetComponent<Collider>().enabled = false;
         var particleSystem = GetComponent<ParticleSystem>();
+        frontLight.enabled = false;
+        backLight.enabled = false;
         particleSystem.Stop();
         particleSystem.Clear();
 
         StartCoroutine(DestroyFuelPickup());
-
     }
 
     IEnumerator DestroyFuelPickup()
     {
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(1f);
         gameObject.SetActive(false);
         Destroy(gameObject);
     }
